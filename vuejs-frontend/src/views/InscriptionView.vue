@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import api from "axios";
+import axios from "axios";
 
 @Component({
   components: {
@@ -54,6 +54,16 @@ export default class InscriptionView extends Vue {
             this.toast("is-danger", "Le mot de passe ne respecte pas les conditions.")
             return;
         }
+        
+        axios.post("/User/register", {id: 1, name : this.pseudo, password : this.password})
+        .then( response => {
+            if(response.data == true) //aller page de connexion
+            {
+                //router page de connexion
+                this.toast("is-success", "Vous êtes bien inscrit !")
+            }
+            else this.toast("is-danger","L'inscription a échoué (déja un compte avec ce pseudo)")
+        })
     }
 
     toast(type:string, text:string){

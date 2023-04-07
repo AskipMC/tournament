@@ -3,12 +3,19 @@
   <div id="app">
 
     <Navbar/>
-    <router-view/>
+    <div class="main-container">
+      <router-view/>
+    </div>
     <Footer/>
 
   </div>
 
 </template>
+<style lang="scss">
+.main-container {
+    padding: 2rem;
+}
+</style>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
