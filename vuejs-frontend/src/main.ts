@@ -6,7 +6,7 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import axios from 'axios'
 
-Vue.use(Buefy)
+Vue.use(Buefy);
 
 Vue.config.productionTip = false
 

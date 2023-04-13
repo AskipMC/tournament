@@ -32,20 +32,21 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import axios from "axios";
+import { mapActions } from 'vuex';
 
 @Component({
   components: {
     
   },
 })
-export default class InscriptionView extends Vue {
+export default class InscriptionView extends Vue { 
 
     pseudo : string = "";
     password : string = "";
 
 
     inscription(){
-        //Verifier si le pseudo contient pas de caracteres spéciaux
+        
         if(this.pseudo.length<4 || this.pseudo.includes(" ")) {
             this.toast("is-danger", "Le pseudo ne respecte pas les conditions.");
             return;
@@ -55,12 +56,12 @@ export default class InscriptionView extends Vue {
             return;
         }
         
-        axios.post("/User/register", {id: 1, name : this.pseudo, password : this.password})
+        axios.post("/User/Register", {pseudo : this.pseudo, password : this.password})
         .then( response => {
-            if(response.data == true) //aller page de connexion
+            if(response.data == true)
             {
-                //router page de connexion
-                this.toast("is-success", "Vous êtes bien inscrit !")
+                this.$router.push("/connexion");
+                this.toast("is-success", "Vous êtes bien inscrit !");
             }
             else this.toast("is-danger","L'inscription a échoué (déja un compte avec ce pseudo)")
         })
@@ -73,5 +74,7 @@ export default class InscriptionView extends Vue {
                 type: type
             });
     }
+
+
 }
 </script>

@@ -43,10 +43,10 @@
                                             {{ selected.name }}
                                         </b-field>
                                         <b-field label="Créateur">
-                                            faire une requete pour chopper le nom du créateur avec son id
+                                            {{  selected.admin }}
                                         </b-field>
                                         <b-field label="Modérateurs">
-                                            pareil
+                                            Prochainement
                                         </b-field>
                                         <b-field label="Description">
                                             {{ selected.description }}
@@ -63,7 +63,12 @@
                                 </div>
                             </b-tab-item>
                             <b-tab-item label="Matchs">
-                                Afficher la liste des matchs
+                                <div v-if="selected.matchs.length==0">
+                                    <span>Il n'y a pas encore de matchs !</span>
+                                </div>
+                                <div v-else>
+                                    Afficher la liste des matchs
+                                </div>
                             </b-tab-item>
                         </b-tabs>
                     </div>
@@ -84,8 +89,8 @@
     </style>
     <script lang="ts">
     import { Component, Vue } from 'vue-property-decorator';
-    import axios from "axios";
-    import { Tournoi } from '@/models/Tournois';
+    import axios from "axios";      
+    import { Tournament } from '@/models/Tournament';
     
     @Component({
       components: {
@@ -94,43 +99,39 @@
     })
     export default class InscriptionView extends Vue {
     
-        tournoi : Tournoi = {
-            id : 1,
-            name : "tournoi1",
-            description : "tournoi test",
-            state : "EN COURS",
-            mode : "POULE",
-            adminId : 1,
-            moderatorsId : [2],
-            participants : ["jo","david"],
-            matchs : [],
-        };
-        selected : Tournoi = {
+        filter_status : string = "TOUS";
+
+        tournaments : Tournament[] = [];
+        selected : Tournament = {
             id : 0,
+            admin: "",
             name : "",
             description : "",
             state : "",
-            mode : "",
-            adminId : 0,
-            moderatorsId : [],
             participants : [],
             matchs : [],
-        };
-        tournois : Tournoi[] = [];
-        filter_status : string = "TOUS";
+        }
     
         mounted(){
             this.fetchTournois();
         }
     
         fetchTournois(){
-            this.tournois.push(this.tournoi); //a enlever plus tard
-            console.log("Get all public tournaments")
+
+            axios.get("/Tournament/All")
+                .then( response => 
+                {
+                    this.tournaments = response.data;
+                    console.log(response.data)
+                })
+                .catch(e => {
+                    console.log("error");
+                })
         }
     
         get filtered_tournois(){
-            if(this.filter_status == "TOUS") return this.tournois;
-            else return this.tournois.filter(tournoi => tournoi.state == this.filter_status);
+            if(this.filter_status == "TOUS") return this.tournaments;
+            else return this.tournaments.filter(tournoi => tournoi.state == this.filter_status);
         }
     
     

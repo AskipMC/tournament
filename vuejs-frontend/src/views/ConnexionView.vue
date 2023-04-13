@@ -41,7 +41,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import axios from "axios";
-
+import authentification from "../store/authentification";
+ 
 @Component({
   components: {
     
@@ -54,13 +55,28 @@ export default class AuthView extends Vue {
 
     connexion(){
         console.log("Valider");
-        axios.get("/User/login")
-            /*.then(response => {
-                console.log("then")
+        axios.post("/User/Login", {pseudo: this.pseudo, password: this.password})
+            .then(response => {
+
+                if(response.data.connected){
+                    authentification.commit("setPseudo", response.data.pseudo);
+                    this.toast("is-success", "Connection effectuée !");
+                }
+                else {
+                    this.toast("is-danger", "La connexion a échoué !");
+                }
             })
             .catch(e => {
-                console.log("error")
-            })*/
+                console.log("error");
+            })
+    }
+
+    toast(type:string, text:string){
+        this.$buefy.toast.open(
+            {
+                message : text,
+                type: type
+            });
     }
 }
 </script>
