@@ -67,7 +67,19 @@
                                     <span>Il n'y a pas encore de matchs !</span>
                                 </div>
                                 <div v-else>
-                                    Afficher la liste des matchs
+                                    <div v-for="match in selected.matchs" class="box">
+                                        <b-taglist attached>
+                                            <b-tag size="is-medium" type="is-light">Match</b-tag>
+                                            <b-tag size="is-medium" :type="selected.state == 'TERMINE' ? 'is-success' : selected.state == 'EN COURS' ? 'is-warning' : 'is-light'">{{ selected.state }}</b-tag>
+                                        </b-taglist>
+                                        <span>Match</span><BR/>
+                                        <b-field :label="match.participant1">
+                                            <b-input type="number" disabled v-model="match.result1"></b-input>
+                                        </b-field>
+                                        <b-field :label="match.participant2">
+                                            <b-input type="number" disabled v-model="match.result2"></b-input>
+                                        </b-field>
+                                    </div>
                                 </div>
                             </b-tab-item>
                         </b-tabs>
